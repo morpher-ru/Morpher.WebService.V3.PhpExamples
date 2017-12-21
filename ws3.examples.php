@@ -1,3 +1,5 @@
+<pre
+     
 <?php
 
 function get_request($url, $params = NULL) {
@@ -95,3 +97,4 @@ $requests_left = get_request("{$base_url}/get_queries_left_for_today");
 echo "Остаток запросов на день: {$requests_left}"
 ?>
 
+</pre>
