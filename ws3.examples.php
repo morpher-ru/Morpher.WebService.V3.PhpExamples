@@ -12,8 +12,10 @@ if (params !== NULL && !empty($params)){
 }
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json',
-										   'Authorization: Basic YThkYWI1ZmUtN2E0Ny00YzE3LTg0ZWEtNDZmYWNiN2QxOWZl'));
+curl_setopt($ch,
+			CURLOPT_HTTPHEADER,
+			array('Accept: application/json',
+			      'Authorization: Basic YThkYWI1ZmUtN2E0Ny00YzE3LTg0ZWEtNDZmYWNiN2QxOWZl'));
 $result = curl_exec($ch);
 if ($result === false) { $result = curl_error($ch); }
 $json = json_decode($result);
@@ -35,7 +37,7 @@ function russian_demo() {
 	
 	echo "Пропись чисел и согласование с числом:\r\n";
 	$spell_result = get_request("{$base_url}/russian/spell", ['n' => '253',
-															  'unit' => 'рубль']);
+	                                                          'unit' => 'рубль']);
 	print_r($spell_result);
 	
 	echo "Склонение прилагательных по родам:\r\n";
@@ -55,8 +57,9 @@ function ukrainian_demo(){
 	print_r($ukrainian_declension);
 	
 	echo "Пропись чисел и согласование с числом:\r\n";
-	$spell_result = get_request("{$base_url}/ukrainian/spell", ['n' => '253',
-															    'unit' => 'рубль']);
+	$spell_result = get_request("{$base_url}/ukrainian/spell", 
+		['n' => '253',
+		'unit' => 'рубль']);
     print_r($spell_result);
 }
 
