@@ -48,7 +48,7 @@ function russian_demo() {
     $base_url = 'https://ws3.morpher.ru';
     
     echo "Склонение на русском языке:\r\n";
-    $russian_declension = get_request("{$base_url}/russian/declension", ['s' => 'Соединенного королевства']);
+    $russian_declension = get_request("{$base_url}/russian/declension", ['s' => 'Соединенное королевство']);
     print_r($russian_declension);
     
     echo "Склонение с признаками:\r\n";
