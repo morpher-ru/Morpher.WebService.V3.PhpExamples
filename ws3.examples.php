@@ -3,7 +3,7 @@
 function get_request($url, $params = NULL) {
     $ch = curl_init();
 
-    if (params !== NULL && !empty($params)){
+    if ($params !== NULL && !empty($params)){
         $url .= '?';
         foreach($params as $key => $value) {
             $url .= $key . '=' . curl_escape($ch, $value) . '&';
