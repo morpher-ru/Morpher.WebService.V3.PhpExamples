@@ -1,33 +1,52 @@
 <?php
 
 function get_request($url, $params = NULL) {
-$ch = curl_init();
+    $ch = curl_init();
 
-if (params !== NULL && !empty($params)){
-    $url .= '?';
-    foreach($params as $key => $value) {
-        $url .= $key . '=' . curl_escape($ch, $value) . '&';
+    if (params !== NULL && !empty($params)){
+        $url .= '?';
+        foreach($params as $key => $value) {
+            $url .= $key . '=' . curl_escape($ch, $value) . '&';
+        }
+        $url = rtrim($url, '&');
     }
-    $url = rtrim($url, '&');
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch,
+                CURLOPT_HTTPHEADER,
+                array('Accept: application/json',
+                      'Authorization: Basic YThkYWI1ZmUtN2E0Ny00YzE3LTg0ZWEtNDZmYWNiN2QxOWZl'));
+    $result = curl_exec($ch);
+    if ($result === false) { $result = curl_error($ch); }
+    $json = json_decode($result);
+    curl_close($ch);
+    return $json;
 }
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch,
-            CURLOPT_HTTPHEADER,
-            array('Accept: application/json',
-                  'Authorization: Basic YThkYWI1ZmUtN2E0Ny00YzE3LTg0ZWEtNDZmYWNiN2QxOWZl'));
-$result = curl_exec($ch);
-if ($result === false) { $result = curl_error($ch); }
-$json = json_decode($result);
-curl_close($ch);
-return $json;
+
+function post_raw($url, $body) {
+    $ch = curl_init();
+    
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+    curl_setopt($ch,
+                CURLOPT_HTTPHEADER,
+                array('Content-Type: text/plain',
+                      'Accept: application/json',
+                      'Authorization: Basic YThkYWI1ZmUtN2E0Ny00YzE3LTg0ZWEtNDZmYWNiN2QxOWZl'));
+    $result = curl_exec($ch);
+    if ($result === false) { $result = curl_error($ch); }
+    $json = json_decode($result);
+    curl_close($ch);
+    return $json;     
 }
 
 function russian_demo() {
     $base_url = 'https://ws3.morpher.ru';
     
     echo "Склонение на русском языке:\r\n";
-    $russian_declension = get_request("{$base_url}/russian/declension", ['s' => '1']);
+    $russian_declension = get_request("{$base_url}/russian/declension", ['s' => 'Соединенного королевства']);
     print_r($russian_declension);
     
     echo "Склонение с признаками:\r\n";
@@ -47,6 +66,11 @@ function russian_demo() {
     echo "Функция образования прилагательных:\r\n";
     $adjectivize = get_request("{$base_url}/russian/adjectivize", ['s' => 'Мытищи']);
     print_r($adjectivize);    
+    
+    echo "Расстановка ударений в текстах:\r\n";
+    $accentizer = post_raw("{$base_url}/russian/addstressmarks", 'Балет Петра Чайковского "Щелкунчик"');
+    print_r($accentizer);
+    echo "\r\n";
 }
 
 function ukrainian_demo(){
@@ -65,7 +89,7 @@ function ukrainian_demo(){
 
 $base_url = 'https://ws3.morpher.ru';
 russian_demo();
-ukrainian_demo();
+//ukrainian_demo();
 
 $requests_left = get_request("{$base_url}/get_queries_left_for_today");
 echo "Остаток запросов на день: {$requests_left}"
