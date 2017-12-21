@@ -89,7 +89,7 @@ function ukrainian_demo(){
 
 $base_url = 'https://ws3.morpher.ru';
 russian_demo();
-//ukrainian_demo();
+ukrainian_demo();
 
 $requests_left = get_request("{$base_url}/get_queries_left_for_today");
 echo "Остаток запросов на день: {$requests_left}"
